@@ -24,7 +24,7 @@ describe('Health incentives application', function () {
         user: null,
         content: null,
         next_state: 'start_menu',
-        response: /Welcome to the Health Incentives system. Select an option:\n1. Register a patient\n2. Record patient progress\n3. Exit/
+        response: /Welcome to Healthy Life. Select an option:\n1. Register a patient\n2. Record patient progress\n3. Exit/
       }).then(done, done);
     });
 
@@ -132,7 +132,18 @@ describe('Health incentives application', function () {
         },
         content: '7606214111089',
         next_state: 'prog_condition',
-        response: /Select patient's condition:/,
+        response: /Select patient's condition:\n1\. Diabetes \(type II\)\n2\. HIV/,
+      }).then(done, done);
+    });
+
+    it('should ask for the incentive after the condition', function (done) {
+      tester.check_state({
+        user: {
+          current_state: 'prog_condition'
+        },
+        content: '1',
+        next_state: 'prog_health_metric',
+        response: /Select the health metric:\n1\. HBA1C value\n2\. BMI\n3\. Waist-to-hip ratio/,
       }).then(done, done);
     });
 
