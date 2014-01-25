@@ -125,8 +125,25 @@ describe('Health incentives application', function () {
       });
     });
 
+    it('should ask for the patient id again if the patient id is unknown', function (done) {
+      tester.check_state({
+        user: {
+          current_state: 'prog_patient_id'
+        },
+        content: '7606214111089',
+        next_state: 'prog_patient_id',
+        response: /No patient with that ID registered\. Re-enter ID:/
+      }).then(done, done);
+    });
+
     it('should ask for the patients condition after the patient id', function (done) {
       tester.check_state({
+        setup: function (api) {
+            api.add_contact({
+                'key': "key-1",
+            });
+            api.set_contact_search_results('extras-hi_member:yes', ["key-1"]);
+        },
         user: {
           current_state: 'prog_patient_id'
         },
@@ -170,8 +187,7 @@ describe('Health incentives application', function () {
                 prog_metric: "hba1c",
             },
         },
-        content: '7.0',
-        next_state: 'prog_value_change',
+        content: '7.0',        next_state: 'prog_value_change',
         response: /Has the patient's HBA1C value:\n1. Improved\n2. Remained stable\n3. Deteriorated/,
       }).then(done, done);
     });
