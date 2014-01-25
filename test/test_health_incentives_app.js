@@ -7,58 +7,57 @@ var assert = require("assert");
 var app = require("../lib/health_incentives_app");
 var vumigo = require("vumigo_v01");
 
-describe('Application', function () {
+describe('Health incentives application', function () {
 
   var tester;
-  var fixtures = [];
 
-  describe('when using the app', function() {
+  describe('when using the start menu', function() {
 
     beforeEach(function () {
       tester = new vumigo.test_utils.ImTester(app.api, {
-        custom_setup: function (api) {
-          api.config_store.config = JSON.stringify({
-              /*
-              config: ["values", "here"]
-              */
-          });
-
-          fixtures.forEach(function (f) {
-            api.load_http_fixture(f);
-          });
-        },
         async: true
       });
     });
 
-    it('should show the opening menu', function (done) {
+    it('should show the start menu', function (done) {
       tester.check_state({
         user: null,
         content: null,
-        next_state: 'start',
-        response: /Hi there! What do you want to do\?\n1. Show this menu again.\n2. Exit/
+        next_state: 'start_menu',
+        response: /Welcome to the Health Incentives system. Select an option:\n1. Register a patient\n2. Record patient progress\n3. Exit/
       }).then(done, done);
     });
 
-    it('should return to the opening menu', function (done) {
+    it('should go to patient registration on request', function (done) {
       tester.check_state({
         user: {
-          current_state: 'start'
+          current_state: 'start_menu'
         },
         content: '1',
-        next_state: 'start',
-        response: /Hi there! What do you want to do\?\n1. Show this menu again.\n2. Exit/
+        next_state: 'reg_patient_name',
+        response: /What is the patient's name\?/,
       }).then(done, done);
     });
 
-    it('should go to the end menu', function (done) {
+    it('should go to patient progress on request', function (done) {
       tester.check_state({
         user: {
-          current_state: 'start'
+          current_state: 'start_menu'
         },
         content: '2',
+        next_state: 'prog_patient_id',
+        response: /What is the patient's ID number\?/,
+      }).then(done, done);
+    });
+
+    it('should exit on request', function (done) {
+      tester.check_state({
+        user: {
+          current_state: 'start_menu'
+        },
+        content: '3',
         next_state: 'end',
-        response: /Thanks, cheers!/,
+        response: /Bye!/,
         continue_session: false  // we expect the session to end here
       }).then(done, done);
     });
