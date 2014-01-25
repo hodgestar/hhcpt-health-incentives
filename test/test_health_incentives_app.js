@@ -176,6 +176,54 @@ describe('Health incentives application', function () {
       }).then(done, done);
     });
 
+    it('should send the incentive if the metric improved', function (done) {
+      tester.check_state({
+        user: {
+            current_state: 'prog_value_change',
+            answers: {
+                prog_condition: "diabetes_type_ii",
+                prog_metric: "hba1c",
+            },
+        },
+        content: '1',
+        next_state: 'prog_send_sms',
+        response: /Improved! Yay! R50 incentive sent!/,
+        continue_session: false
+      }).then(done, done);
+    });
+
+    it('should send the incentive if the metric improved', function (done) {
+      tester.check_state({
+        user: {
+            current_state: 'prog_value_change',
+            answers: {
+                prog_condition: "diabetes_type_ii",
+                prog_metric: "hba1c",
+            },
+        },
+        content: '2',
+        next_state: 'prog_send_sms',
+        response: /Stable. Okay. R50 incentive sent./,
+        continue_session: false
+      }).then(done, done);
+    });
+
+    it('should not send the incentive if the metric worsened', function (done) {
+      tester.check_state({
+        user: {
+            current_state: 'prog_value_change',
+            answers: {
+                prog_condition: "diabetes_type_ii",
+                prog_metric: "hba1c",
+            },
+        },
+        content: '3',
+        next_state: 'prog_send_sms',
+        response: /Worsened :\(. No incentive sent./,
+        continue_session: false
+      }).then(done, done);
+    });
+
   });
 
 });
