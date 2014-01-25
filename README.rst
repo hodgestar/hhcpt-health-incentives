@@ -15,7 +15,7 @@ Getting started
 ::
 
     $ npm install .
-    $ ./node_modules/.bin/mocha -R spec
+    $ npm test
 
 
 Development
