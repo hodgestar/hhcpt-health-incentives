@@ -10,12 +10,13 @@ var vumigo = require("vumigo_v01");
 describe('Health incentives application', function () {
 
   var tester;
+  var patient_1, patient_1_id;
 
   describe('when using the start menu', function() {
 
     beforeEach(function () {
       tester = new vumigo.test_utils.ImTester(app.api, {
-        async: true
+          async: true,
       });
     });
 
@@ -68,7 +69,7 @@ describe('Health incentives application', function () {
 
     beforeEach(function () {
       tester = new vumigo.test_utils.ImTester(app.api, {
-        async: true
+          async: true,
       });
     });
 
@@ -120,8 +121,20 @@ describe('Health incentives application', function () {
   describe('when using the patient progress menu', function() {
 
     beforeEach(function () {
+      patient_1_id = "7607111234089";
+      patient_1 = {
+          key: "key-1",
+          'extras-hi_patient_id': patient_1_id,
+      };
       tester = new vumigo.test_utils.ImTester(app.api, {
-        async: true
+          async: true,
+          custom_setup: function (api) {
+              api.add_contact(patient_1);
+              api.set_contact_search_results(
+                  'extras-hi_patient_id:' + patient_1_id,
+                  [patient_1.key]
+              );
+          },
       });
     });
 
@@ -138,16 +151,10 @@ describe('Health incentives application', function () {
 
     it('should ask for the patients condition after the patient id', function (done) {
       tester.check_state({
-        setup: function (api) {
-            api.add_contact({
-                'key': "key-1",
-            });
-            api.set_contact_search_results('extras-hi_member:yes', ["key-1"]);
-        },
         user: {
-          current_state: 'prog_patient_id'
+            current_state: 'prog_patient_id',
         },
-        content: '7606214111089',
+        content: patient_1_id,
         next_state: 'prog_condition',
         response: /Select patient's condition:\n1\. Diabetes \(type II\)\n2\. HIV/,
       }).then(done, done);
@@ -197,6 +204,7 @@ describe('Health incentives application', function () {
         user: {
             current_state: 'prog_value_change',
             answers: {
+                prog_patient_id: patient_1_id,
                 prog_condition: "diabetes_type_ii",
                 prog_metric: "hba1c",
             },
@@ -213,6 +221,7 @@ describe('Health incentives application', function () {
         user: {
             current_state: 'prog_value_change',
             answers: {
+                prog_patient_id: patient_1_id,
                 prog_condition: "diabetes_type_ii",
                 prog_metric: "hba1c",
             },
@@ -229,6 +238,7 @@ describe('Health incentives application', function () {
         user: {
             current_state: 'prog_value_change',
             answers: {
+                prog_patient_id: patient_1_id,
                 prog_condition: "diabetes_type_ii",
                 prog_metric: "hba1c",
             },
