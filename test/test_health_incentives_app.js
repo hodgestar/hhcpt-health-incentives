@@ -63,4 +63,49 @@ describe('Health incentives application', function () {
     });
 
   });
+
+  describe('when using the registration menu', function() {
+
+    beforeEach(function () {
+      tester = new vumigo.test_utils.ImTester(app.api, {
+        async: true
+      });
+    });
+
+    it('should ask for the patient id after the patient name', function (done) {
+      tester.check_state({
+        user: {
+          current_state: 'reg_patient_name'
+        },
+        content: 'Patient Bob',
+        next_state: 'reg_patient_id',
+        response: /What is the patient's ID number\?/,
+      }).then(done, done);
+    });
+
+    it('should ask for the patient cellphone number after the patient id', function(done) {
+      tester.check_state({
+        user: {
+          current_state: 'reg_patient_id'
+        },
+        content: '7606214111089',
+        next_state: 'reg_patient_cell_number',
+        response: /What is the patient's cellphone number\?/,
+      }).then(done, done);
+    });
+
+    it('should save the patient as a contact after the cellphone number is entered', function(done) {
+      tester.check_state({
+        user: {
+          current_state: 'reg_patient_cell_number'
+        },
+        content: '+27735551111',
+        next_state: 'reg_end',
+        response: /Patient registered\./,
+        continue_session: false,
+      }).then(done, done);
+    });
+
+  });
+
 });
