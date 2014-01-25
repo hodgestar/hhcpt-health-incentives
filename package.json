@@ -1,0 +1,31 @@
+{
+  "name": "hhcpt-health-incentives",
+  "version": "0.0.1",
+  "description": "An prototype health incentive system",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "vumigo_v01": "0.1.x",
+    "jed": "0.5.x"
+  },
+  "devDependencies": {
+    "mocha": "~1.7.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hodgestar/hhcpt-health-incentives"
+  },
+  "keywords": [
+    "vumi",
+    "ussd",
+    "sms"
+  ],
+  "author": "Simon Cross <simon.cross@praekeltfoundation.org>",
+  "license": "MIT",
+  "readmeFilename": "README.rst"
+}
