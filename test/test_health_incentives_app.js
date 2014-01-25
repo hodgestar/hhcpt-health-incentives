@@ -161,6 +161,20 @@ describe('Health incentives application', function () {
       }).then(done, done);
     });
 
+    it('should ask for the value change after the metric value', function (done) {
+      tester.check_state({
+        user: {
+            current_state: 'prog_value',
+            answers: {
+                prog_condition: "diabetes_type_ii",
+                prog_metric: "hba1c",
+            },
+        },
+        content: '7.0',
+        next_state: 'prog_value_change',
+        response: /Has the patient's HBA1C value:\n1. Improved\n2. Remained stable\n3. Deteriorated/,
+      }).then(done, done);
+    });
 
   });
 
