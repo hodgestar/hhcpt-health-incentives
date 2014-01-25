@@ -108,4 +108,25 @@ describe('Health incentives application', function () {
 
   });
 
+  describe('when using the patient progress menu', function() {
+
+    beforeEach(function () {
+      tester = new vumigo.test_utils.ImTester(app.api, {
+        async: true
+      });
+    });
+
+    it('should ask for the patients condition after the patient id', function (done) {
+      tester.check_state({
+        user: {
+          current_state: 'prog_patient_id'
+        },
+        content: '7606214111089',
+        next_state: 'prog_condition',
+        response: /Select patient's condition:/,
+      }).then(done, done);
+    });
+
+  });
+
 });
