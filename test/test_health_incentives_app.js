@@ -250,6 +250,23 @@ describe('Health incentives application', function () {
       }).then(done, done);
     });
 
+    it('should not send the incentive if the patient id is not valid', function (done) {
+      tester.check_state({
+        user: {
+            current_state: 'prog_value_change',
+            answers: {
+                prog_patient_id: "bad",
+                prog_condition: "diabetes_type_ii",
+                prog_metric: "hba1c",
+            },
+        },
+        content: '3',
+        next_state: 'prog_send_sms',
+        response: /foo/,
+        continue_session: false
+      }).then(done, done);
+    });
+
   });
 
 });
