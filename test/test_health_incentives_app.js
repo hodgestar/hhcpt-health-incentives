@@ -262,7 +262,7 @@ describe('Health incentives application', function () {
         },
         content: '3',
         next_state: 'prog_send_sms',
-        response: /foo/,
+        response: /Patient not found. :\//,
         continue_session: false
       }).then(done, done);
     });
