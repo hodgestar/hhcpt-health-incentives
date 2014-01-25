@@ -111,6 +111,7 @@ describe('Health incentives application', function () {
         var contact = app.api.find_contact('sms', '+2712345');
         assert.equal(contact['extras-hi_patient_name'], 'Patient Bob');
         assert.equal(contact['extras-hi_patient_id'], '55511');
+        assert.equal(contact['extras-hi_member'], 'yes');
       }).then(done, done);
     });
 
