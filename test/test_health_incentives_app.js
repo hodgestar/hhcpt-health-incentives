@@ -136,16 +136,31 @@ describe('Health incentives application', function () {
       }).then(done, done);
     });
 
-    it('should ask for the incentive after the condition', function (done) {
+    it('should ask for the metric after the condition', function (done) {
       tester.check_state({
         user: {
           current_state: 'prog_condition'
         },
         content: '1',
-        next_state: 'prog_health_metric',
+        next_state: 'prog_metric',
         response: /Select the health metric:\n1\. HBA1C value\n2\. BMI\n3\. Waist-to-hip ratio/,
       }).then(done, done);
     });
+
+    it('should ask for the metric value after selecting the metric', function (done) {
+      tester.check_state({
+        user: {
+            current_state: 'prog_metric',
+            answers: {
+                prog_condition: "diabetes_type_ii",
+            },
+        },
+        content: '1',
+        next_state: 'prog_value',
+        response: /Enter the patient's HBA1C value:/,
+      }).then(done, done);
+    });
+
 
   });
 
