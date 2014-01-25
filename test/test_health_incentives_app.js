@@ -97,12 +97,20 @@ describe('Health incentives application', function () {
     it('should save the patient as a contact after the cellphone number is entered', function(done) {
       tester.check_state({
         user: {
-          current_state: 'reg_patient_cell_number'
+            current_state: 'reg_patient_cell_number',
+            answers: {
+                reg_patient_name: "Patient Bob",
+                reg_patient_id: "55511",
+            }
         },
-        content: '+27735551111',
+        content: '+2712345',
         next_state: 'reg_end',
         response: /Patient registered\./,
         continue_session: false,
+      }).then(function() {
+        var contact = app.api.find_contact('sms', '+2712345');
+        assert.equal(contact['extras-hi_patient_name'], 'Patient Bob');
+        assert.equal(contact['extras-hi_patient_id'], '55511');
       }).then(done, done);
     });
 
